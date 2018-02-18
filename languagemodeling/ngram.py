@@ -2,6 +2,7 @@
 from collections import defaultdict
 import math
 
+inf = float('inf')
 
 class LanguageModel(object):
 
@@ -17,13 +18,13 @@ class LanguageModel(object):
 
         sent -- the sentence as a list of tokens.
         """
-        return -math.inf
+        return -inf
 
     def log_prob(self, sents):
         result = 0.0
         for i, sent in enumerate(sents):
             lp = self.sent_log_prob(sent)
-            if lp == -math.inf:
+            if lp == -inf:
                 return lp
             result += lp
         return result
@@ -108,7 +109,7 @@ class NGram(LanguageModel):
 
         def log_cond_prob(tokens):
             cond_prob = self.cond_prob(token=tokens[-1], prev_tokens=tokens[:-1])
-            return math.log2(cond_prob) if cond_prob != 0 else - math.inf
+            return math.log2(cond_prob) if cond_prob != 0 else - inf
 
         return sum(log_cond_prob(tuple(sent[i-n+1:i+1])) for i in range(n-1, len(sent)))
 

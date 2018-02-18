@@ -21,7 +21,7 @@ from languagemodeling.ngram import NGram, AddOneNGram #, InterpolatedNGram
 
 models = {
     'ngram': NGram,
-    'addone': AddOneNGram,
+    'addone': AddOneNGram
 #     'inter': InterpolatedNGram,
 }
 
@@ -30,10 +30,10 @@ if __name__ == '__main__':
     opts = docopt(__doc__)
 
     # load the data
-    nltk.download('machado')
-    from nltk.corpus import machado
-
-    sents = machado.sents()
+    train_filename = "train.dmp"
+    train_file = open(train_filename, "rb")
+    sents = pickle.load(train_file)
+    train_file.close()
 
     # train the model
     n = int(opts['-n'])

@@ -25,8 +25,10 @@ if __name__ == '__main__':
     f.close()
 
     # load the data
-    # WORK HERE!! LOAD YOUR EVALUATION CORPUS
-    sents = gutenberg.sents('austen-persuasion.txt')
+    test_filename = "test.dmp"
+    test_file = open(test_filename, "rb")
+    sents = pickle.load(test_file)
+    test_file.close()
 
     # compute the cross entropy
     log_prob = model.log_prob(sents)
