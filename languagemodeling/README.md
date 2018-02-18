@@ -1,3 +1,19 @@
+### Frases generadas
+
+##### N = 1
+lhe outras palavras fala uma e estas . a . livros no tr?s No aproveitava tinha e tout nisso e distinto o de mal e se'
+
+##### N = 2
+Pode , tornou - lhe mere?o desprezo tranq?ilo sem morrer .
+
+##### N = 3
+Augusta levantou os olhos para enxugar uma l?grima .
+
+##### N = 4
+Tenho que fazer ; mas logo aparecerei em tua casa ; quero ver - te homem .
+
+
+
 ## Resultados
 
 ### Perplexity
