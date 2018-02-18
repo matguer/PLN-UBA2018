@@ -53,7 +53,7 @@ class NGram(LanguageModel):
         for sent in sents:
             count[()] += len(sent) + 1
             for k in range(max(1,n-1), n + 1):
-                marked_sent = self.addMarkers(sent)
+                marked_sent = self.add_markers(sent)
                 for i in range(len(marked_sent) - k + 1):
                     ngram = tuple(marked_sent[i:i + k])
                     count[ngram] += 1
@@ -89,7 +89,7 @@ class NGram(LanguageModel):
         sent -- the sentence as a list of tokens.
         """
         n = self._n
-        sent = self.addMarkers(sent)
+        sent = self.add_markers(sent)
 
         from functools import reduce
         return reduce(lambda x, y: x * y,
@@ -104,7 +104,7 @@ class NGram(LanguageModel):
         sent -- the sentence as a list of tokens.
         """
         n = self._n
-        sent = self.addMarkers(sent)
+        sent = self.add_markers(sent)
 
         def log_cond_prob(tokens):
             cond_prob = self.cond_prob(token=tokens[-1], prev_tokens=tokens[:-1])
@@ -112,8 +112,15 @@ class NGram(LanguageModel):
 
         return sum(log_cond_prob(tuple(sent[i-n+1:i+1])) for i in range(n-1, len(sent)))
 
-    def addMarkers(self, sent):
+    def add_markers(self, sent):
         return ['<s>']*(self._n-1) + sent + ['</s>']
+
+    def word_types(self, sents):
+        types = set(['</s>'])
+        for sent in sents:
+            for token in sent:
+                types.add(token)
+        return types
 
 
 class AddOneNGram(NGram):
@@ -127,9 +134,7 @@ class AddOneNGram(NGram):
         super().__init__(n, sents)
 
         # compute vocabulary
-        self._voc = voc = set()
-        # WORK HERE!!
-
+        self._voc = voc = self.word_types(sents)
         self._V = len(voc)  # vocabulary size
 
     def V(self):
@@ -149,7 +154,13 @@ class AddOneNGram(NGram):
             prev_tokens = ()
         assert len(prev_tokens) == n - 1
 
-        # WORK HERE!!
+        count_prev_tokens = self.count(prev_tokens) + self.V()
+        if count_prev_tokens == 0:
+            return 0
+        else:
+            tokens = prev_tokens + (token,)
+            count_tokens = self.count(tokens) + 1
+            return count_tokens / count_prev_tokens
 
 
 class InterpolatedNGram(NGram):
