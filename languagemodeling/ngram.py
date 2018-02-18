@@ -187,15 +187,24 @@ class InterpolatedNGram(NGram):
             held_out_sents = sents[m:]
 
         print('Computing counts...')
-        # WORK HERE!!
         # COMPUTE COUNTS FOR ALL K-GRAMS WITH K <= N
+        count = defaultdict(int)
+        for sent in train_sents:
+            count[()] += len(sent) + 1
+            for k in range(1,n+1):
+                marked_sent = self.add_markers(sent)
+                for i in range(len(marked_sent)-k+1):
+                    ngram = tuple(marked_sent[i:i+k])
+                    count[ngram] += 1
+
+        self._count = dict(count)
 
         # compute vocabulary size for add-one in the last step
         self._addone = addone
         if addone:
             print('Computing vocabulary...')
             self._voc = voc = set()
-            # WORK HERE!!
+            voc = self.word_types(sents)
 
             self._V = len(voc)
 
@@ -224,7 +233,7 @@ class InterpolatedNGram(NGram):
 
         tokens -- the k-gram tuple.
         """
-        # WORK HERE!! (JUST A RETURN STATEMENT)
+        return self._count.get(tokens, 0)
 
     def cond_prob(self, token, prev_tokens=None):
         """Conditional probability of a token.
@@ -247,11 +256,19 @@ class InterpolatedNGram(NGram):
             # i-th term of the sum
             if i < n - 1:
                 # COMPUTE lambdaa AND cond_ml.
-                pass
+                tokens_count = self.count(tokens[:i + 1])
+                prev_tokens_count = self.count(prev_tokens[i:])
+                lambdaa = (1 - cum_lambda) * (tokens_count / (tokens_count + self._gamma))
+                cond_ml = (float(self.count(tokens[i:])) / prev_tokens_count) if prev_tokens_count != 0 else 0
             else:
                 # COMPUTE lambdaa AND cond_ml.
                 # LAST TERM: USE ADD ONE IF NEEDED!
-                pass
+                lambdaa = 1 - cum_lambda
+                prev_tokens_count = self.count(prev_tokens[i:])
+                if self._addone:
+                    cond_ml = (float(self.count(tokens[i:])) + 1) / (prev_tokens_count + self._V)
+                else:
+                    cond_ml = (float(self.count(tokens[i:])) / prev_tokens_count) if prev_tokens_count != 0 else 0
 
             prob += lambdaa * cond_ml
             cum_lambda += lambdaa
