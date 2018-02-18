@@ -50,7 +50,13 @@ class NGram(LanguageModel):
 
         count = defaultdict(int)
 
-        # WORK HERE!!
+        for sent in sents:
+            count[()] += len(sent) + 1
+            for k in range(max(1,n-1), n + 1):
+                marked_sent = self.addMarkers(sent)
+                for i in range(len(marked_sent) - k + 1):
+                    ngram = tuple(marked_sent[i:i + k])
+                    count[ngram] += 1
 
         self._count = dict(count)
 
@@ -67,21 +73,47 @@ class NGram(LanguageModel):
         token -- the token.
         prev_tokens -- the previous n-1 tokens (optional only if n = 1).
         """
-        # WORK HERE!!
+        if prev_tokens is None:
+            prev_tokens = ()
+        count_prev_tokens = self.count(prev_tokens)
+        if count_prev_tokens == 0:
+            return 0
+        else:
+            tokens = prev_tokens + (token,)
+            count_tokens = self.count(tokens)
+            return count_tokens / count_prev_tokens
 
     def sent_prob(self, sent):
         """Probability of a sentence. Warning: subject to underflow problems.
 
         sent -- the sentence as a list of tokens.
         """
-        # WORK HERE!!
+        n = self._n
+        sent = self.addMarkers(sent)
+
+        from functools import reduce
+        return reduce(lambda x, y: x * y,
+                      map(lambda tokens: self.cond_prob(token=tokens[-1], prev_tokens=tokens[:-1]),
+                        [tuple(sent[i-n+1:i+1]) for i in range(n-1, len(sent))]
+                        )
+                      )
 
     def sent_log_prob(self, sent):
         """Log-probability of a sentence.
 
         sent -- the sentence as a list of tokens.
         """
-        # WORK HERE!!
+        n = self._n
+        sent = self.addMarkers(sent)
+
+        def log_cond_prob(tokens):
+            cond_prob = self.cond_prob(token=tokens[-1], prev_tokens=tokens[:-1])
+            return math.log2(cond_prob) if cond_prob != 0 else - math.inf
+
+        return sum(log_cond_prob(tuple(sent[i-n+1:i+1])) for i in range(n-1, len(sent)))
+
+    def addMarkers(self, sent):
+        return ['<s>']*(self._n-1) + sent + ['</s>']
 
 
 class AddOneNGram(NGram):
