@@ -15,14 +15,13 @@ Options:
 """
 from docopt import docopt
 import pickle
-import nltk
-from languagemodeling.ngram import NGram, AddOneNGram #, InterpolatedNGram
+from languagemodeling.ngram import NGram, AddOneNGram, InterpolatedNGram
 
 
 models = {
     'ngram': NGram,
-    'addone': AddOneNGram
-#     'inter': InterpolatedNGram,
+    'addone': AddOneNGram,
+    'inter': InterpolatedNGram,
 }
 
 

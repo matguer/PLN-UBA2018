@@ -31,4 +31,4 @@ if __name__ == '__main__':
     n = int(opts['-n'])
     for i in range(n):
         sent = generator.generate_sent()
-        print(' '.join(sent))
+        print(' '.join(sent).encode('utf-8'))
