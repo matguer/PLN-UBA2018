@@ -7,7 +7,7 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.svm import LinearSVC
 from sklearn.linear_model import LogisticRegression
 
-from tagging.features import (History, word_lower, word_istitle, word_isupper,
+from tagging.features import (History, word_lower, word_istitle, word_isupper, prev_tags,
                               word_isdigit, NPrevTags, PrevWord, NextWord)
 
 
@@ -28,7 +28,21 @@ class MEMM:
         """
         # 1. build the pipeline
         # WORK HERE!!
-        self._pipeline = pipeline = None
+        self.n = n
+        
+        
+        #
+        #  TENEMOS QUE AGREGAR LOS K FEATURES PARA NEXT Y PREV
+        #
+        histories = self.sents_histories(tagged_sents)
+        basic_features = [word_lower, prev_tags, word_istitle, word_isupper, word_isdigit, NPrevTags(n)]
+        features = basic_features + [cf(f) for f in basic_features for cf in [PrevWord, NextWord]]
+        vect = Vectorizer(features)
+        
+        self._pipeline = pipeline = Pipeline([
+            ('vect', vect),
+            ('clf', classifiers[clf]())
+        ])
 
         # 2. train it
         print('Training classifier...')
@@ -38,6 +52,10 @@ class MEMM:
 
         # 3. build known words set
         # WORK HERE!!
+        self._known_words = set()
+        for sent in tagged_sents:
+            for word, tag in sent:
+                self._known_words.add(word)
 
     def sents_histories(self, tagged_sents):
         """
@@ -85,6 +103,15 @@ class MEMM:
         sent -- the sentence.
         """
         # WORK HERE!!
+        tags = []
+        prev = ('<s>', '<s>')
+        for i, w in enumerate(sent):
+            h = History(sent, prev, i)
+            tag = self.tag_history(h)
+            prev = (prev + (tag,))[1:]
+            tags.append(tag)
+            
+        return tags
 
     def tag_history(self, h):
         """Tag a history.
@@ -92,6 +119,7 @@ class MEMM:
         h -- the history.
         """
         # WORK HERE!!
+        return self._pipeline.predict([h])[0]
 
     def unknown(self, w):
         """Check if a word is unknown for the model.
@@ -99,3 +127,4 @@ class MEMM:
         w -- the word.
         """
         # WORK HERE!!
+        return w not in self._known_words
