@@ -36,3 +36,11 @@ n	words	%	top
 8	0	0.00	()
 9	0	0.00	()
 
+
+## Ejercicio 2
+
+### Resultados obtenidos:
+
+100.0% (87.58% / 95.27% / 18.01%)
+Accuracy: 87.58% / 95.27% / 18.01%
+

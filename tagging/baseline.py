@@ -1,5 +1,7 @@
 from collections import defaultdict
 
+def inner_default_dict():
+    return defaultdict(int)
 
 class BadBaselineTagger:
 
@@ -40,7 +42,7 @@ class BaselineTagger:
         """
         # WORK HERE!!
         self._default_tag = default_tag
-        self._word_tag_count = defaultdict(lambda: defaultdict(int))
+        self._word_tag_count = defaultdict(inner_default_dict)
         for tagged_sent in tagged_sents:
             for word, tag in tagged_sent:
                 self._word_tag_count[word][tag] += 1
