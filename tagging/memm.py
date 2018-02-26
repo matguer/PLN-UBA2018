@@ -29,7 +29,8 @@ class MEMM:
         # 1. build the pipeline
         # WORK HERE!!
         self.n = n
-        histories = self.sents_histories(tagged_sents)
+        tagged_sents_list = list(tagged_sents)
+        histories = self.sents_histories(tagged_sents_list)
         basic_features = [word_lower, prev_tags, word_istitle, word_isupper, word_isdigit, NPrevTags(n)]
         features = basic_features + [cf(f) for f in basic_features for cf in [PrevWord, NextWord]]
         vect = Vectorizer(features)
@@ -41,14 +42,14 @@ class MEMM:
 
         # 2. train it
         print('Training classifier...')
-        X = self.sents_histories(tagged_sents)
-        y = self.sents_tags(tagged_sents)
+        X = histories
+        y = self.sents_tags(tagged_sents_list)
         pipeline.fit(list(X), list(y))#
 
         # 3. build known words set
         # WORK HERE!!
         self._known_words = set()
-        for sent in tagged_sents:
+        for sent in tagged_sents_list:
             for word, tag in sent:
                 self._known_words.add(word)
 
