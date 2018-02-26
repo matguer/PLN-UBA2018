@@ -29,11 +29,6 @@ class MEMM:
         # 1. build the pipeline
         # WORK HERE!!
         self.n = n
-        
-        
-        #
-        #  TENEMOS QUE AGREGAR LOS K FEATURES PARA NEXT Y PREV
-        #
         histories = self.sents_histories(tagged_sents)
         basic_features = [word_lower, prev_tags, word_istitle, word_isupper, word_isdigit, NPrevTags(n)]
         features = basic_features + [cf(f) for f in basic_features for cf in [PrevWord, NextWord]]
@@ -48,7 +43,7 @@ class MEMM:
         print('Training classifier...')
         X = self.sents_histories(tagged_sents)
         y = self.sents_tags(tagged_sents)
-        pipeline.fit(list(X), list(y))
+        pipeline.fit(list(X), list(y))#
 
         # 3. build known words set
         # WORK HERE!!
