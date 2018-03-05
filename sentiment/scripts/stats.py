@@ -1,32 +1,33 @@
 """Print corpus statistics.
 
 Usage:
-  stats.py
+  stats.py -c <corpus>
   stats.py -h | --help
 
 Options:
+  -c <corpus>      Corpus sobre el cual se calculan las estadísticas
+                  inter: InterTASS
+                  general: GeneralTASS
   -h --help     Show this screen.
 """
 from docopt import docopt
 from collections import defaultdict
 
-from sentiment.tass import InterTASSReader
+from sentiment.tass import InterTASSReader, GeneralTASSReader
 
 
 class Stats:
     """Several statistics for a POS tagged corpus.
     """
 
-    def __init__(self, tass_reader):
+    def __init__(self, tweets, polarities):
         """
-        tass_reader -- corpus TASS
+        tweets: Contenido de cada tweet
+        polarity: Clasificación de polaridad de cada tweet
         """
-        self._tweets = list(reader.tweets())  # iterador sobre los tweets
-        tweets_iterator = list(reader.X())  # iterador sobre los contenidos de los tweets
-        polarity_iterator = list(reader.y())  # iterador sobre las polaridades de los tweets
-
+        self._tweets = list(tweets)
         self._polarity_count = defaultdict(int)
-        for polarity in polarity_iterator:
+        for polarity in polarities:
             self._polarity_count[polarity] += 1
 
     def tweets_count(self):
@@ -40,10 +41,18 @@ if __name__ == '__main__':
     opts = docopt(__doc__)
 
     # load the data
-    reader = InterTASSReader('TASS/InterTASS/tw_faces4tassTrain1000rc.xml')
+    if opts['-c'] == 'inter':
+        reader = InterTASSReader('TASS/InterTASS/tw_faces4tassTrain1000rc.xml')
+    elif opts['-c'] == 'general':
+        reader = GeneralTASSReader('TASS/GeneralTASS/general-tweets-train-tagged.xml')
+    else:
+        print("Corpus inexistente")
+        exit(1)
+
+    tweets, polarity = reader.X(), reader.y()
 
     # compute the statistics
-    stats = Stats(reader)
+    stats = Stats(tweets, polarity)
 
     print('Basic Statistics')
     print('================')
