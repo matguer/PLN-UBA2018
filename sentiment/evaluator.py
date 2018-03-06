@@ -60,35 +60,47 @@ class Evaluator(object):
         metrics = self._label_metrics
 
         # print per-label precision, recall and F1
+        print('| Sentiment | Precision | Recall | F1 |')
+        print('| --------- | --------- | ------ | -- |')
         for label in labels:
-            print('Sentiment {}:'.format(label))
             m = metrics[label]
-            print('  Precision: {:2.2f}% ({}/{})'.format(m.prec, m.hits, m.pred))
-            print('  Recall: {:2.2f}% ({}/{})'.format(m.rec, m.hits, m.true))
-            print('  F1: {:2.2f}%'.format(f1(m.prec, m.rec)))
+            print('| {} | {:2.2f}% ({}/{}) | {:2.2f}% ({}/{}) | {:2.2f}% |'.format(label, m.prec, m.hits, m.pred, m.rec, m.hits, m.true, f1(m.prec, m.rec)))
+            #print('Sentiment {}:'.format(label))
+            #print('  Precision: {:2.2f}% ({}/{})'.format(m.prec, m.hits, m.pred))
+            #print('  Recall: {:2.2f}% ({}/{})'.format(m.rec, m.hits, m.true))
+            #print('  F1: {:2.2f}%'.format(f1(m.prec, m.rec)))
+
+        print()
 
         hits = self._hits
         total = self._total
         acc = self._acc
         macro_prec = self._macro_prec
         macro_rec = self._macro_rec
-        print('Accuracy: {:2.2f}% ({}/{})'.format(acc, hits, total))
-        print('Macro-Precision: {:2.2f}%'.format(macro_prec))
-        print('Macro-Recall: {:2.2f}%'.format(macro_rec))
-        print('Macro-F1: {:2.2f}%'.format(f1(macro_prec, macro_rec)))
+        print('| Accuracy | Macro-Precision | Macro-Recall | Macro-F1 |')
+        print('| -------- | --------------- | ------------ | -------- |')
+        print('| {:2.2f}% ({}/{}) | {:2.2f}% | {:2.2f}% | {:2.2f}% |'.format(acc, hits, total, macro_prec, macro_rec, f1(macro_prec, macro_rec)))
+        #print('Accuracy: {:2.2f}% ({}/{})'.format(acc, hits, total))
+        #print('Macro-Precision: {:2.2f}%'.format(macro_prec))
+        #print('Macro-Recall: {:2.2f}%'.format(macro_rec))
+        #print('Macro-F1: {:2.2f}%'.format(f1(macro_prec, macro_rec)))
+        print()
 
     def print_confusion_matrix(self):
         labels = self._labels
         CM = self._CM
 
         # confusion matrix
-        for label in labels:
-            print('\t{}'.format(label), end='')
-        print('')
+        for label in [''] + labels:
+            print('| {} '.format(label), end='')
+        print('|')
+        for i in range(len(labels)):
+            print('| ---- ', end='')
+        print('|')
 
         # print table rows
         for i, label1 in enumerate(labels):
-            print('{}\t'.format(label1), end='')
+            print('| {} '.format(label1), end='')
             for j, label2 in enumerate(labels):
-                print('{}\t'.format(CM[i, j]), end='')
-            print('')
+                print(' | {} '.format(CM[i, j]), end='')
+            print('|')
