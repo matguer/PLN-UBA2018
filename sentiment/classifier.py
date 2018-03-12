@@ -71,7 +71,7 @@ class SentimentClassifier(object):
         """
         self._clf = clf
         self._pipeline = pipeline = Pipeline([
-            ('vect', not_count_vectorizer_improvement()),
+            ('vect', default_count_vectorizer()),
             ('clf', classifiers[clf]()),
         ])
 
