@@ -71,7 +71,7 @@ class SentimentClassifier(object):
         """
         self._clf = clf
         self._pipeline = pipeline = Pipeline([
-            ('vect', default_count_vectorizer()),
+            ('vect', tweet_tokenizer_count_vectorizer_improvement()),
             ('clf', classifiers[clf]()),
         ])
 

@@ -373,3 +373,83 @@
 
 
 
+# Ejercicio 2b
+
+N:
+	portada ;-) enhorabuena besos buena ([-1.79455119 -1.79385749 -1.32522904 -1.32330086 -1.31996872])
+	denuncia odio recortes muertos triste ([1.61085566 1.67503365 1.73063649 2.00134694 2.35689936])
+
+NEU:
+	parados cree portada toda cont ([-1.07308983 -1.04328449 -0.99198165 -0.98635968 -0.94534415])
+	expectación decidirán huelga @palomacervilla broma ([1.26534759 1.29802823 1.32196835 1.32926172 1.40175607])
+
+NONE:
+	;-) feliz gracias gran mal ([-2.3014078  -1.89779197 -1.78641882 -1.74520424 -1.61971695])
+	periódico jugar @juandevi reunión portada ([1.25258114 1.33123844 1.35833665 1.45095676 2.25098602])
+
+P:
+	culpa triste portada urdangarin odio ([-1.46644099 -1.41013482 -1.37790014 -1.28119956 -1.20576253])
+	felicidades gracias homenaje enhorabuena ;-) ([1.90229751 1.9487667  2.04844774 2.31960857 2.37838754])
+
+
+CLASES: 
+['N' 'NEU' 'NONE' 'P']
+
+
+ahora [-0.20066646 -0.03454963  0.26203698  0.04468842]
+al [ 0.00386869  0.11363162 -0.26320739  0.09783681]
+ciudad [-0.58074747  0.03540038  0.44864737  0.00977746]
+cosas [ 0.71409583  0.07901836 -0.27782944 -0.72609136]
+de [ 0.13807588 -0.07258769 -0.20564828 -0.03271813]
+empiezan [-0.13887552 -0.07578511  0.1729899  -0.06345376]
+en [-0.09633458 -0.05319608  0.20030809 -0.06994263]
+esta [-0.02936525 -0.21082205 -0.07543002  0.1383814 ]
+evolucionar [ 0.36793267 -0.02187521 -0.01257487 -0.343345  ]
+jornadas [-0.01068355 -0.14750557 -0.21725026  0.26781018]
+las [ 0.02498463  0.2133392  -0.15458239 -0.05328272]
+me [ 0.27754304  0.22774609 -0.52292864 -0.0647821 ]
+muchas [-0.13169169 -0.46685844 -0.25131655  0.2867102 ]
+más [-0.04979122  0.28073638 -0.60173174  0.21413074]
+poco [ 0.64119138  0.24778346 -0.2859971  -0.62257896]
+pongo [ 0.24053164  0.19242199  0.49479855 -0.89039287]
+que [ 0.09678463  0.12266464 -0.37013691  0.00135843]
+seguimos [ 0.50785913 -0.47663757 -0.19748381  0.07117987]
+sin [ 0.70398528  0.0244311  -0.00620113 -0.83076279]
+toros [-0.33584478 -0.08248272  0.77159612 -0.24314698]
+triste [ 2.35689936 -0.51619586 -1.00037178 -1.41013482]
+un [ 0.20004174 -0.08031841 -0.46973567  0.11094899]
+ver [-0.29257955  0.12103199 -0.08934954  0.24422158]
+
+
+TWEET:  Ahora que empiezan las jornadas de toros en esta ciudad me pongo un poco más triste al ver que seguimos sin evolucionar en muchas cosas 
+PREDICTED:  ['N']
+TWEET:  Ahora que empiezan las jornadas de toros en esta ciudad me pongo un poco más ;-) al ver que seguimos sin evolucionar en muchas cosas 
+PREDICTED:  ['N']
+TWEET:  Ahora que empiezan las jornadas de toros en esta ciudad me pongo un poco más ;-) al ver que seguimos  evolucionar en muchas cosas 
+PREDICTED:  ['P']
+TWEET:  Ahora que empiezan las jornadas de toros en esta ciudad me pongo más en broma al ver que seguimos en huelga por evolucionar en muchas cosas 
+PREDICTED:  ['NEU']
+
+
+
+# Ejercicio 3
+
+Se eligió MNB del improvement 2
+
+| Sentiment | Precision | Recall | F1 |
+| --------- | --------- | ------ | -- |
+| P | 52.09% (524/1006) | 81.62% (524/642) | 63.59% |
+| N | 60.05% (529/881) | 68.97% (529/767) | 64.20% |
+| NEU | 0.00% (0/4) | 0.00% (0/216) | 0.00% |
+| NONE | 50.00% (4/8) | 1.46% (4/274) | 2.84% |
+
+| Accuracy | Macro-Precision | Macro-Recall | Macro-F1 |
+| -------- | --------------- | ------------ | -------- |
+| 55.66% (1057/1899) | 40.53% | 38.01% | 39.23% |
+
+|  | P | N | NEU | NONE |
+| ---- | ---- | ---- | ---- |
+| P  | 524  | 113  | 2  | 3 |
+| N  | 237  | 529  | 1  | 0 |
+| NEU  | 106  | 109  | 0  | 1 |
+| NONE  | 139  | 130  | 1  | 4 |

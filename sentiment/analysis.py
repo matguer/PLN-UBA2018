@@ -29,7 +29,6 @@ def print_feature_weights_for_item(vect, clf, x):
 	vect -- text vectorizer (count or tf-idf)
 	clf -- LogisticRegression classifier
 	"""
-	print('x: ', x)
 	features = vect.get_feature_names()
 	x2 = vect.transform([x])
 	col = x2.tocoo().col

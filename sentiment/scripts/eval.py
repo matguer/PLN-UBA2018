@@ -19,6 +19,10 @@ from sentiment.evaluator import Evaluator
 from sentiment.tass import InterTASSReader
 from sentiment.analysis import print_maxent_features, print_feature_weights_for_item
 
+def print_tweet_prediction(tweet):
+    print("TWEET: ", tweet)
+    print("PREDICTED: ", pipeline.predict([tweet]))
+
 if __name__ == '__main__':
     opts = docopt(__doc__)
 
@@ -58,5 +62,12 @@ if __name__ == '__main__':
         clf = pipeline.named_steps['clf']
         print_maxent_features(vect, clf)
 
-        tweet = X[10]
+        print("CLASES: ")
+        print(pipeline.classes_)
+
+        tweet = X[402]
         print_feature_weights_for_item(vect, clf, tweet)
+        print_tweet_prediction(tweet)
+        print_tweet_prediction(tweet.replace('triste', ';-)'))
+        print_tweet_prediction(tweet.replace('triste', ';-)').replace('sin', ''))
+        print_tweet_prediction(tweet.replace('un poco más triste', 'más en broma').replace('sin', 'en huelga por'))
