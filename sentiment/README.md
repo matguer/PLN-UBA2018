@@ -1,3 +1,53 @@
+# Ejercicio 1
+
+## Estadísticas InterTASS
+
+Total Tweets: 1008
+
+### Polarity Counts
+
+| NEU | N | NONE | P |
+| --- | - | ---- | - |
+| 133 | 418 | 139 | 318 |
+
+
+## Estadísticas GeneralTASS
+
+Total Tweets: 7219
+
+### Polarity Counts
+
+| NEU | N+ | P+ | N | NONE | P |
+| --- | -- | -- | - | ---- | - |
+| 670 | 847 | 1652 | 1335 | 1483 | 1232 |
+
+
+
+# Ejercicio 2
+
+Para este ejercicio se eligieron las siguientes 4 mejoras para el clasificador:
+
+###### Improvement 1: Binarización de Conteos
+
+Consiste básicamente en no contar repeticiones. Es decir, cada palabra aparece o no aparece, sin importar la cantidad de veces que lo hace.
+
+###### Improvement 2: Mejor Tokenizer
+
+Para esta mejora se utilizó el TweetTokenizer de nltk. El mismo contempla emojis y signos de puntuación, los cuales pueden ser de gran importancia para el análisis de sentimiento.
+
+###### Improvement 3: Filtrado de stopwords
+
+En esta mejora se utilizó el listado de stop words de nltk para que no sean contempladas.
+
+###### Improvement 4: Manejo de Negaciones
+
+En cuanto al manejo de negaciones, la idea consistió en que cada vez que aparecía una palabra 'no' o 'tampoco', se procedía a modificar las siguientes palabras agregandoles el prefijo 'NOT_'. En particular se decidió agregar dicho prefijo a los siguientes 5 tokens o hasta encontrar un punto.
+
+
+
+A continuación se muestran los resultados obtenidos, tanto para el CountVectorizer por defecto, como para cada una de las 4 mejoras:
+
+
 ## DEFAULT
 ### MAXENT
 ##### Eval
@@ -375,6 +425,10 @@
 
 # Ejercicio 2b
 
+Para este ejercicio se tomó la mejora que tokeniza contemplando emojis y signos de puntuación.
+
+A continuación se muestran, para cada etiqueta, qué tokens influyeron más para cada una de ellas, tanto a favor como en contra.
+
 N:
 	portada ;-) enhorabuena besos buena ([-1.79455119 -1.79385749 -1.32522904 -1.32330086 -1.31996872])
 	denuncia odio recortes muertos triste ([1.61085566 1.67503365 1.73063649 2.00134694 2.35689936])
@@ -392,9 +446,15 @@ P:
 	felicidades gracias homenaje enhorabuena ;-) ([1.90229751 1.9487667  2.04844774 2.31960857 2.37838754])
 
 
+Luego se eligió un tweet con id 402,
+
+'Ahora que empiezan las jornadas de toros en esta ciudad me pongo un poco más triste al ver que seguimos sin evolucionar en muchas cosas'
+
+y para este se analizó el peso de cada token para cada etiqueta:
+
+
 CLASES: 
 ['N' 'NEU' 'NONE' 'P']
-
 
 ahora [-0.20066646 -0.03454963  0.26203698  0.04468842]
 al [ 0.00386869  0.11363162 -0.26320739  0.09783681]
@@ -421,20 +481,36 @@ un [ 0.20004174 -0.08031841 -0.46973567  0.11094899]
 ver [-0.29257955  0.12103199 -0.08934954  0.24422158]
 
 
-TWEET:  Ahora que empiezan las jornadas de toros en esta ciudad me pongo un poco más triste al ver que seguimos sin evolucionar en muchas cosas 
+Veamos que la etiqueta que se predijo en este caso es N:
+
+TWEET:  Ahora que empiezan las jornadas de toros en esta ciudad me pongo un poco más triste al ver que seguimos sin evolucionar en muchas cosas
 PREDICTED:  ['N']
-TWEET:  Ahora que empiezan las jornadas de toros en esta ciudad me pongo un poco más ;-) al ver que seguimos sin evolucionar en muchas cosas 
+
+En particular, la palabra que más peso para la etiqueta negativa es 'triste', probamos que pasa si la reemplazamos por el token que más peso tiene en general para el positivo. Este token es el emoji de cara feliz, ';-)'. Notar lo importante que fue poder contemplar los emojis ya que claramente en este caso podemos ver como influyen mucho en cuanto al análisis de sentimiento.
+
+TWEET:  Ahora que empiezan las jornadas de toros en esta ciudad me pongo un poco más ;-) al ver que seguimos sin evolucionar en muchas cosas
 PREDICTED:  ['N']
-TWEET:  Ahora que empiezan las jornadas de toros en esta ciudad me pongo un poco más ;-) al ver que seguimos  evolucionar en muchas cosas 
+
+Aún reemplazando la palabra con más peso negativo en la frase por el token con más peso positivo en general, seguimos obteniendo una etiquita N. Para seguir probando los pesos, decidimos sacar la segunda palabra que orienta más nuestra frase a dicha clase, y este es el token 'sin'. En particular decidimos sacarlo por completo.
+
+TWEET:  Ahora que empiezan las jornadas de toros en esta ciudad me pongo un poco más ;-) al ver que seguimos  evolucionar en muchas cosas
 PREDICTED:  ['P']
-TWEET:  Ahora que empiezan las jornadas de toros en esta ciudad me pongo más en broma al ver que seguimos en huelga por evolucionar en muchas cosas 
+
+Ahora si podemos ver como el clasificador predijo un sentimiento positivo.
+
+A modo de pruebas, fuimos introduciendo algunas de las palabras más influyentes de la clase NEU para ver en qué punto podíamos lograr que el clasificador nos clasificara con dicha etiqueta.
+
+TWEET:  Ahora que empiezan las jornadas de toros en esta ciudad me pongo más en broma al ver que seguimos en huelga por evolucionar en muchas cosas
 PREDICTED:  ['NEU']
 
 
 
 # Ejercicio 3
 
-Se eligió MNB del improvement 2
+Se eligió MNB del improvement 2, es decir, de la mejora que tokeniza contemplando puntación y emojis. Se eligió dicha mejora dado que en líneas generales, fue el que obtuvo mejores resultados generales, Accuracy, Macro-Precision, Macro-Recall y Macro-F1.
+
+Los resultados obtenidos sobre los datos de test fueron los siguientes:
+
 
 | Sentiment | Precision | Recall | F1 |
 | --------- | --------- | ------ | -- |
@@ -453,3 +529,6 @@ Se eligió MNB del improvement 2
 | N  | 237  | 529  | 1  | 0 |
 | NEU  | 106  | 109  | 0  | 1 |
 | NONE  | 139  | 130  | 1  | 4 |
+
+
+Notar que, al ser sometido el clasificador a este nuevo set de datos, los porcentajes decrecieron bastante y en particular podemos ver en la matriz de confusión que no se detectó correctamente ningún caso de NEU y en cuanto a la predicción de las clases N y P, tenemos una gran cantidad de desaciertos.
